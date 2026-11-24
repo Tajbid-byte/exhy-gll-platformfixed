@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: exhygll-review-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips='*'
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      # Render asks for this value when you create the service from the Blueprint.
+      # Use your exact Vercel URL, e.g. https://exhygll.vercel.app (no trailing slash needed).
+      - key: FRONTEND_ORIGINS
+        sync: false
+      - key: ALLOW_VERCEL_PREVIEWS
+        value: "false"
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "30"
